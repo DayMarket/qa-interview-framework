@@ -66,4 +66,8 @@ test {
     ignoreFailures = true
     useJUnitPlatform()
     jvmArgs = [ "-javaagent:${configurations.agent.singleFile}" ]
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        showStandardStreams = true
+    }
 }
