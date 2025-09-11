@@ -1,0 +1,43 @@
+# Gradle
+.gradle
+build
+!**/src/main/**/build/
+!**/src/test/**/build/
+.gradletasknamecache
+
+# Compiled class file
+*.class
+.idea
+allure-results/
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.war
+*.nar
+*.ear
+*.tar.gz
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+/local.properties
+
+#Allure
+.allure
+/*/allure-results/
+
+#IDEA
+.idea/*
+*.iml
+*.ipr
+
+#Mac OS
+.DS_Store

@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+}
+
+wrapper {
+    gradleVersion = '8.10.2'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'uz.daymarket.qa_interview_framework'
+version = '1.0-SNAPSHOT'
+
+def allureVersion = '2.29.0'
+def aspectJVersion = '1.9.22'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.add('-parameters')
+}
+
+configurations {
+    agent {
+        canBeResolved = true
+        canBeConsumed = true
+    }
+}
+
+dependencies {
+
+    agent "org.aspectj:aspectjweaver:$aspectJVersion"
+
+
+
+    implementation platform("io.qameta.allure:allure-bom:$allureVersion")
+    implementation "io.qameta.allure:allure-junit5"
+
+    testImplementation platform("org.junit:junit-bom:5.11.3")
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+
+    testImplementation "org.slf4j:slf4j-simple:2.0.16"
+    implementation("com.squareup.okhttp3:okhttp:5.1.0")
+    implementation 'io.qameta.allure:allure-okhttp3:2.24.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.0'
+    implementation("org.assertj:assertj-core:3.27.3")
+}
+
+jar {
+    manifest {
+        attributes(
+                "Automatic-Module-Name": "io.qameta.allure.okhttp"
+        )
+    }
+}
+
+test {
+    ignoreFailures = true
+    useJUnitPlatform()
+    jvmArgs = [ "-javaagent:${configurations.agent.singleFile}" ]
+}
