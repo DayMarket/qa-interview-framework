@@ -1,4 +1,4 @@
-package apis.theCatApi;
+package apis.OrderApi;
 
 import apis.AllureOkHttpInterceptor;
 import apis.LoggingOkHttpInterceptor;
@@ -6,21 +6,20 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
- * Base class for Cat API clients.
+ * Base class for Order API clients.
  * <p>
- * Service documentation:
- * <a href="https://developers.thecatapi.com/">
- * https://developers.thecatapi.com/
+ * Service Swagger documentation:
+ * <a href="https://qa-interview-service.dev.cluster.daymarket.uz/swagger/index.html#">
+ * https://qa-interview-service.dev.cluster.daymarket.uz/swagger/index.html#
  * </a>
  */
 
-public abstract class BaseCatApi {
-    protected static final String BASE_URL = "http://api.thecatapi.com/v1";
-    protected static final String API_KEY = "API_KEY";
+public class BaseOrderApi {
+    protected static final String BASE_URL = "https://qa-interview-service.dev.cluster.daymarket.uz";
 
     protected final OkHttpClient client;
 
-    protected BaseCatApi() {
+    protected BaseOrderApi() {
         this.client = new OkHttpClient.Builder()
                 .addInterceptor(new AllureOkHttpInterceptor())
                 .addInterceptor(new LoggingOkHttpInterceptor())
@@ -30,7 +29,6 @@ public abstract class BaseCatApi {
     protected Request.Builder baseRequestBuilder(String endpoint) {
         return new Request.Builder()
                 .url(BASE_URL + endpoint)
-                .addHeader("Content-Type", "application/json")
-                .addHeader("x-api-key", API_KEY);
+                .addHeader("Content-Type", "application/json");
     }
 }
