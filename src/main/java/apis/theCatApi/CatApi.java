@@ -11,7 +11,7 @@ public class CatApi extends BaseCatApi {
     @Step("Получить породы кошачьих")
     public Response getAllBreeds() {
         Request request = baseRequestBuilder("/breeds")
-                .addHeader("limit", "20")
+                .addHeader("limit", "6")
                 .build();
         try (Response response = client.newCall(request).execute()) {
             return response;

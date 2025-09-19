@@ -47,11 +47,17 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 
-    testImplementation "org.slf4j:slf4j-simple:2.0.16"
+    implementation "ch.qos.logback:logback-classic:1.4.14"
     implementation("com.squareup.okhttp3:okhttp:5.1.0")
     implementation 'io.qameta.allure:allure-okhttp3:2.24.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.0'
     implementation("org.assertj:assertj-core:3.27.3")
+
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    implementation("io.qameta.allure:allure-assertj:2.30.0")
+    runtimeOnly("org.aspectj:aspectjweaver:1.9.24")
 }
 
 jar {
@@ -70,4 +76,12 @@ test {
         events "passed", "skipped", "failed", "standardOut", "standardError"
         showStandardStreams = true
     }
+
+    systemProperty("junit.jupiter.extensions.autodetection.enabled", "true")
+    systemProperty("junit.jupiter.execution.parallel.enabled", "true")
+    systemProperty("junit.jupiter.execution.parallel.mode.default", "concurrent")
+    systemProperty("junit.jupiter.execution.parallel.mode.classes.default", "concurrent")
+    systemProperty("junit.jupiter.execution.parallel.config.strategy", "fixed")
+    systemProperty("junit.jupiter.execution.parallel.config.fixed.parallelism", "12")
+    systemProperty("junit.jupiter.execution.parallel.config.fixed.max-pool-size", "12")
 }
