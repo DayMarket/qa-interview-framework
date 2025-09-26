@@ -2,6 +2,7 @@ package utils.OrderApi;
 
 import classes.OrderApi.Client;
 import classes.OrderApi.OrdersData;
+import classes.OrderApi.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Response;
 
@@ -27,6 +28,14 @@ public class OrderApiMappers {
             return objectMapper.readValue(response.body().string(), OrdersData.class);
         } catch (IOException e) {
             throw new RuntimeException("Failed to map OrdersData from response", e);
+        }
+    }
+
+    public static Order mapOrder(Response response) {
+        try (response) {
+            return objectMapper.readValue(response.body().string(), Order.class);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to map Order from response", e);
         }
     }
 }
