@@ -2,6 +2,7 @@
     <property name="LOG_FILE" value="${logFile:-testRun.log}"/>
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>${LOG_FILE}</file>
+        <append>false</append> <!-- Overwrite the log file on each run -->
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>

@@ -7,7 +7,6 @@ import enums.OrderApi.ClientStatus;
 import enums.OrderApi.OrderStatus;
 import okhttp3.Response;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import utils.OrderApi.ClientUtils;
 import utils.OrderApi.OrderUtils;
@@ -17,6 +16,7 @@ import java.util.List;
 import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static utils.OrderApi.OrderApiMappers.mapOrder;
 import static utils.OrderApi.OrderApiMappers.mapOrdersData;
 
 public class CreateOrderTest {
@@ -41,21 +41,22 @@ public class CreateOrderTest {
         Response createOrderResponse = orderApi.createOrder(
                 orderAmount, clientUtils.getRandomClient(ClientStatus.enabled).getClientId());
 
-        OrdersData ordersAfter = mapOrdersData(orderApi.getAllOrders());
+        Order createdOrder = mapOrder(createOrderResponse);
 
-        List<Order> newOrders = orderUtils.getNewOrders(ordersBefore, ordersAfter);
-
-        Order CreatedOrder = newOrders.getFirst();
+        List<Order> foundOrders = mapOrdersData(orderApi.getAllOrders())
+                .getItems().stream()
+                .filter(order -> order.getOrderId().equals(createdOrder.getOrderId()))
+                .toList();
 
         step("Проверить параметры созданного заказа", () -> {
             assertAll(
-                    () -> assertThat(createOrderResponse.code()).isEqualTo(404),  // ¯_(ツ)/¯
-                    () -> assertThat(CreatedOrder.getAmount())
+                    () -> assertThat(createOrderResponse.code()).isEqualTo(201),
+                    () -> assertThat(createdOrder.getAmount())
                             .as("Check that created order amount is")
                             .isEqualTo(orderAmount.doubleValue()),
-                    () -> assertThat(newOrders.size()).isEqualTo(1),
-                    () -> assertThat(CreatedOrder.getStatus()).isEqualTo(OrderStatus.Created),
-                    () -> assertThat(ordersAfter.getTotal()).isEqualTo(ordersBefore.getTotal() + 1)
+                    () -> assertThat(createdOrder.getStatus()).isEqualTo(OrderStatus.Created),
+                    () -> assertThat(foundOrders.size()).isEqualTo(1),
+                    () -> assertThat(foundOrders.getFirst().getAmount()).isEqualTo(orderAmount.doubleValue())
             );
         });
     }

@@ -75,6 +75,10 @@ test {
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
         showStandardStreams = true
+        exceptionFormat = 'full'
+        showCauses = true
+        showExceptions = true
+        showStackTraces = true
     }
 
     systemProperty("junit.jupiter.extensions.autodetection.enabled", "true")
