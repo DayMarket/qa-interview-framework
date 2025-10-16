@@ -47,7 +47,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 
-    implementation "ch.qos.logback:logback-classic:1.4.14"
+    implementation 'ch.qos.logback:logback-classic:1.5.19'
+    implementation 'ch.qos.logback:logback-core:1.5.19'
     implementation("com.squareup.okhttp3:okhttp:5.1.0")
     implementation 'io.qameta.allure:allure-okhttp3:2.24.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.0'
@@ -69,7 +70,7 @@ jar {
 }
 
 test {
-    ignoreFailures = true
+    ignoreFailures = false
     useJUnitPlatform()
     jvmArgs = [ "-javaagent:${configurations.agent.singleFile}" ]
     testLogging {
@@ -88,4 +89,11 @@ test {
     systemProperty("junit.jupiter.execution.parallel.config.strategy", "fixed")
     systemProperty("junit.jupiter.execution.parallel.config.fixed.parallelism", "12")
     systemProperty("junit.jupiter.execution.parallel.config.fixed.max-pool-size", "12")
+
+    reports.html.outputLocation = layout.buildDirectory.dir("reports/tests")
+}
+
+tasks.named('test') {
+    // disable up-to-date checks so tests run every invocation
+    outputs.upToDateWhen { false }
 }

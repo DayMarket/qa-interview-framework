@@ -7,6 +7,8 @@ This project provides a framework for automated testing
 - `src/main` - Main source code
 - `src/test` - Test sources
 - `build/` - Build outputs and reports
+- `build/tests-run-logs` - Test run network logs
+- `build/allure-results` - Test run generated report
 
 ## Build & Run
 
