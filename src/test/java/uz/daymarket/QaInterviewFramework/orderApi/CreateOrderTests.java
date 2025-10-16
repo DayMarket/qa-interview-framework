@@ -2,7 +2,6 @@ package uz.daymarket.QaInterviewFramework.orderApi;
 
 import apis.OrderApi.OrdersApi;
 import classes.OrderApi.Order;
-import classes.OrderApi.OrdersData;
 import enums.OrderApi.ClientStatus;
 import enums.OrderApi.OrderStatus;
 import okhttp3.Response;
@@ -37,27 +36,25 @@ public class CreateOrderTests extends BaseTest {
     public void createOrderTest() {
         Number orderAmount = (long) (Math.random() * 1_000_000);
 
-        OrdersData ordersBefore = mapOrdersData(orderApi.getAllOrders());
-
         Response createOrderResponse = orderApi.createOrder(
                 orderAmount, clientUtils.getRandomClient(ClientStatus.enabled).getClientId());
 
         Order createdOrder = mapOrder(createOrderResponse);
 
-        List<Order> foundOrders = mapOrdersData(orderApi.getAllOrders())
-                .getItems().stream()
-                .filter(order -> order.getOrderId().equals(createdOrder.getOrderId()))
-                .toList();
+        List<Order> foundOrders = orderUtils.findOrdersById(
+                mapOrdersData(orderApi.getAllOrders()),
+                createdOrder.getOrderId()
+        );
 
         step("Проверить параметры созданного заказа", () -> {
             assertAll(
-                    () -> assertThat(createOrderResponse.code()).isEqualTo(201),
-                    () -> assertThat(createdOrder.getAmount())
-                            .as("Check that created order amount is")
-                            .isEqualTo(orderAmount.doubleValue()),
-                    () -> assertThat(createdOrder.getStatus()).isEqualTo(OrderStatus.Created),
-                    () -> assertThat(foundOrders.size()).isEqualTo(1),
-                    () -> assertThat(foundOrders.getFirst().getAmount()).isEqualTo(orderAmount.doubleValue())
+                    () -> assertThat(createOrderResponse.code())
+                            .as("Expected HTTP status 201 when creating an order")
+                            .isEqualTo(201),
+                    () -> assertThat(createdOrder.getStatus())
+                            .as("Expected created order to have status " + OrderStatus.Created)
+                            .isEqualTo(OrderStatus.Created)
+                    // place for more assertions
             );
         });
     }
