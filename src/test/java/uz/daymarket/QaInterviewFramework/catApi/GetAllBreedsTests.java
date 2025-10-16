@@ -3,10 +3,11 @@ package uz.daymarket.QaInterviewFramework.catApi;
 import apis.theCatApi.CatApi;
 import okhttp3.Response;
 import org.junit.jupiter.api.Test;
+import uz.daymarket.QaInterviewFramework.BaseTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class GetAllBreedsTest {
+public class GetAllBreedsTests extends BaseTest {
 
     @Test
     public void getAllBreedsTest() {

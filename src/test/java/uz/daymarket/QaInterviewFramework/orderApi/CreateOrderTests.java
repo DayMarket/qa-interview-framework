@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.OrderApi.ClientUtils;
 import utils.OrderApi.OrderUtils;
+import uz.daymarket.QaInterviewFramework.BaseTest;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static utils.OrderApi.OrderApiMappers.mapOrder;
 import static utils.OrderApi.OrderApiMappers.mapOrdersData;
 
-public class CreateOrderTest {
+public class CreateOrderTests extends BaseTest {
 
     private ClientUtils clientUtils;
     private OrderUtils orderUtils;

@@ -1,13 +1,20 @@
 <configuration>
-    <property name="LOG_FILE" value="${logFile:-testRun.log}"/>
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>${LOG_FILE}</file>
-        <append>false</append> <!-- Overwrite the log file on each run -->
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator class="ch.qos.logback.classic.sift.MDCBasedDiscriminator">
+            <key>testName</key>
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="FILE-${testName}" class="ch.qos.logback.core.FileAppender">
+                <file>build/tests-run-logs/${testName}.log</file>
+                <append>false</append>
+                <encoder>
+                    <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
     </appender>
     <root level="INFO">
-        <appender-ref ref="FILE"/>
+        <appender-ref ref="SIFT"/>
     </root>
 </configuration>
