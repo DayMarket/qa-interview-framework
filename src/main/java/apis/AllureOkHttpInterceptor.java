@@ -7,8 +7,6 @@ import io.qameta.allure.attachment.DefaultAttachmentProcessor;
 import io.qameta.allure.attachment.FreemarkerAttachmentRenderer;
 import io.qameta.allure.attachment.http.HttpRequestAttachment;
 import io.qameta.allure.attachment.http.HttpResponseAttachment;
-import io.qameta.allure.internal.shadowed.jackson.databind.ObjectMapper;
-import io.qameta.allure.internal.shadowed.jackson.databind.ObjectWriter;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -31,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import utils.common.JsonUtils;
 
 /**
  * Allure interceptor logger for OkHttp.
@@ -56,10 +55,8 @@ public class AllureOkHttpInterceptor implements Interceptor {
         }
         try {
             if (contentType != null && contentType.contains("application/json")) {
-                ObjectMapper mapper = new ObjectMapper();
-                Object json = mapper.readValue(body, Object.class);
-                ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-                return writer.writeValueAsString(json);
+                Object json = JsonUtils.readValue(body, Object.class);
+                return JsonUtils.writeValueAsPrettyString(json);
             } else if (contentType != null && (contentType.contains("application/xml") || contentType.contains("text/xml"))) {
                 Transformer transformer = TransformerFactory.newInstance().newTransformer();
                 transformer.setOutputProperty(OutputKeys.INDENT, "yes");

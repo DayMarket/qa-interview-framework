@@ -1,4 +1,4 @@
-package classes.OrderApi;
+package dto.orderapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

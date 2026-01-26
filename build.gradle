@@ -3,7 +3,7 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = '8.10.2'
+    gradleVersion = '9.3.0'
 }
 
 repositories {
@@ -13,8 +13,10 @@ repositories {
 group = 'uz.daymarket.qa_interview_framework'
 version = '1.0-SNAPSHOT'
 
-def allureVersion = '2.29.0'
-def aspectJVersion = '1.9.22'
+
+def allureVersion = '2.32.0'
+def aspectJVersion = '1.9.25.1'
+def junitVersion = '5.14.2'
 
 java {
     toolchain {
@@ -38,27 +40,27 @@ dependencies {
 
     agent "org.aspectj:aspectjweaver:$aspectJVersion"
 
-
-
     implementation platform("io.qameta.allure:allure-bom:$allureVersion")
-    implementation "io.qameta.allure:allure-junit5"
+    testImplementation "io.qameta.allure:allure-junit5"
 
-    testImplementation platform("org.junit:junit-bom:5.11.3")
+    // Main (src/main) dependencies
+    implementation 'ch.qos.logback:logback-classic:1.5.25'
+//    implementation 'ch.qos.logback:logback-core:1.5.25'
+    implementation("com.squareup.okhttp3:okhttp:5.1.0")
+    implementation 'io.qameta.allure:allure-okhttp3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.0'
+    implementation("org.assertj:assertj-core:3.27.3")
+    implementation("io.qameta.allure:allure-assertj")
+//    runtimeOnly("org.aspectj:aspectjweaver:1.9.24")
+
+    // Test dependencies
+    testImplementation platform("org.junit:junit-bom:$junitVersion")
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 
-    implementation 'ch.qos.logback:logback-classic:1.5.19'
-    implementation 'ch.qos.logback:logback-core:1.5.19'
-    implementation("com.squareup.okhttp3:okhttp:5.1.0")
-    implementation 'io.qameta.allure:allure-okhttp3:2.24.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.0'
-    implementation("org.assertj:assertj-core:3.27.3")
-
+    // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
-
-    implementation("io.qameta.allure:allure-assertj:2.30.0")
-    runtimeOnly("org.aspectj:aspectjweaver:1.9.24")
 }
 
 jar {

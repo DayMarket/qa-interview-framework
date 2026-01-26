@@ -1,6 +1,6 @@
-package classes.OrderApi;
+package dto.orderapi;
 
-import enums.OrderApi.ClientStatus;
+import dto.enums.ClientStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
