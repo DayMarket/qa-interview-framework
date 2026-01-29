@@ -6,6 +6,11 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
+/**
+ * API client for Client-related operations.
+ * <p>
+ * OpenAPI 3.0 JSON spec: {@code resources/order-api-specification.json}
+ */
 public class ClientsApi extends BaseOrderApi {
 
     @Step("Получить список клиентов")
