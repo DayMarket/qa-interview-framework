@@ -8,6 +8,11 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
+/**
+ * API client for Order-related operations.
+ * <p>
+ * OpenAPI 3.0 JSON spec: {@code resources/order-api-specification.json}
+ */
 public class OrdersApi extends BaseOrderApi {
 
     @Step("Получить список заказов")

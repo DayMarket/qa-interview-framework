@@ -36,6 +36,8 @@ This project provides a framework for automated testing.
 - `utils/OrderApi`
     - `ClientUtils.java`, `OrderApiMappers.java`, `OrderUtils.java` - helpers to build test data, map API responses to domain models and common utilities.
 
+- 'resources/order-api-specification.json' - OpenAPI specification for OrderApi endpoints used for reference.
+
 </details>
 
 <details>

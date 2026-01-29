@@ -12,6 +12,8 @@ import okhttp3.Request;
  * <a href="https://qa-interview-service.dev.cluster.daymarket.uz/swagger/index.html#">
  * https://qa-interview-service.dev.cluster.daymarket.uz/swagger/index.html#
  * </a>
+ * <p>
+ * OpenAPI 3.0 JSON spec: {@code resources/order-api-specification.json}
  */
 
 public class BaseOrderApi {
