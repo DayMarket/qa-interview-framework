@@ -1,62 +1,32 @@
 {
-  "openapi": "3.0.0",
+  "schemes": [],
+  "swagger": "2.0",
   "info": {
-    "title": "Order API",
-    "description": "RESTful API for managing clients and orders in the QA Interview Framework",
-    "version": "1.0.0",
-    "contact": {
-      "name": "QA Interview Framework",
-      "url": "https://qa-interview-service.dev.cluster.daymarket.uz/swagger/index.html#"
-    }
+    "description": "Simple service for managing clients and orders backed by a JSON file.",
+    "title": "Clients & Orders Service",
+    "contact": {},
+    "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "https://qa-interview-service.dev.cluster.daymarket.uz",
-      "description": "Development server"
-    }
-  ],
+  "host": "",
+  "basePath": "/",
   "paths": {
     "/clients": {
       "get": {
-        "summary": "Get all clients",
-        "description": "Retrieves a list of all clients in the system",
-        "operationId": "getAllClients",
-        "tags": ["Clients"],
+        "description": "Returns all clients",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get clients",
         "responses": {
           "200": {
-            "description": "Successfully retrieved clients",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Client"
-                  }
-                },
-                "example": [
-                  {
-                    "id": "client-123",
-                    "name": "John Doe",
-                    "email": "john.doe@example.com",
-                    "status": "ACTIVE"
-                  },
-                  {
-                    "id": "client-456",
-                    "name": "Jane Smith",
-                    "email": "jane.smith@example.com",
-                    "status": "ACTIVE"
-                  }
-                ]
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderApiError"
-                }
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/models.Client"
               }
             }
           }
@@ -65,346 +35,284 @@
     },
     "/orders": {
       "get": {
-        "summary": "Get all orders",
-        "description": "Retrieves a list of all orders in the system",
-        "operationId": "getAllOrders",
-        "tags": ["Orders"],
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved orders",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Order"
-                  }
-                },
-                "example": [
-                  {
-                    "id": "order-789",
-                    "amount": 150.50,
-                    "clientId": "client-123",
-                    "status": "PENDING",
-                    "createdAt": "2026-01-29T10:30:00Z"
-                  },
-                  {
-                    "id": "order-790",
-                    "amount": 299.99,
-                    "clientId": "client-456",
-                    "status": "CONFIRMED",
-                    "createdAt": "2026-01-29T11:15:00Z"
-                  }
-                ]
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderApiError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create a new order",
-        "description": "Creates a new order for a specified client",
-        "operationId": "createOrder",
-        "tags": ["Orders"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderRequest"
-              },
-              "example": {
-                "amount": 150.50,
-                "clientId": "client-123"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Order successfully created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Order"
-                },
-                "example": {
-                  "id": "order-791",
-                  "amount": 150.50,
-                  "clientId": "client-123",
-                  "status": "PENDING",
-                  "createdAt": "2026-01-29T12:00:00Z"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderApiError"
-                },
-                "example": {
-                  "message": "Invalid request data",
-                  "code": "INVALID_REQUEST",
-                  "details": {
-                    "field": "amount",
-                    "error": "Amount must be a positive number"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Client not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderApiError"
-                },
-                "example": {
-                  "message": "Client not found",
-                  "code": "CLIENT_NOT_FOUND",
-                  "details": {
-                    "clientId": "client-999"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderApiError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/orders/{orderId}/cancel": {
-      "post": {
-        "summary": "Cancel an order",
-        "description": "Cancels an existing order by its ID",
-        "operationId": "cancelOrder",
-        "tags": ["Orders"],
+        "description": "Returns orders with optional filters and pagination",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get orders",
         "parameters": [
           {
-            "name": "orderId",
-            "in": "path",
-            "description": "ID of the order to cancel",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "order-789"
+            "type": "string",
+            "description": "Filter by clientId",
+            "name": "clientId",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "Filter by status (Created|Paid|Canceled)",
+            "name": "status",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "Page number (default 1)",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "Page size (default 20, max 100)",
+            "name": "pageSize",
+            "in": "query"
           }
         ],
         "responses": {
           "200": {
-            "description": "Order successfully cancelled",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Order"
-                },
-                "example": {
-                  "id": "order-789",
-                  "amount": 150.50,
-                  "clientId": "client-123",
-                  "status": "CANCELLED",
-                  "createdAt": "2026-01-29T10:30:00Z"
-                }
-              }
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/http.OrdersResponse-models_Order"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a new order with status 'Created'",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "orders"
+        ],
+        "summary": "Create order",
+        "parameters": [
+          {
+            "description": "Create order payload",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/http.CreateOrderRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/models.Order"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/http.apiError"
             }
           },
           "404": {
-            "description": "Order not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderApiError"
-                },
-                "example": {
-                  "message": "Order not found",
-                  "code": "ORDER_NOT_FOUND",
-                  "details": {
-                    "orderId": "order-999"
-                  }
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Order cannot be cancelled",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderApiError"
-                },
-                "example": {
-                  "message": "Order cannot be cancelled",
-                  "code": "INVALID_STATE",
-                  "details": {
-                    "orderId": "order-789",
-                    "currentStatus": "COMPLETED",
-                    "reason": "Order is already completed"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderApiError"
-                }
-              }
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/http.apiError"
             }
           }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Client": {
-        "type": "object",
-        "required": ["id", "name", "email", "status"],
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique identifier for the client",
-            "example": "client-123"
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the client",
-            "example": "John Doe"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "description": "Email address of the client",
-            "example": "john.doe@example.com"
-          },
-          "status": {
-            "$ref": "#/components/schemas/ClientStatus"
-          }
-        }
-      },
-      "ClientStatus": {
-        "type": "string",
-        "enum": ["ACTIVE", "INACTIVE", "SUSPENDED"],
-        "description": "Status of the client",
-        "example": "ACTIVE"
-      },
-      "Order": {
-        "type": "object",
-        "required": ["id", "amount", "clientId", "status", "createdAt"],
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique identifier for the order",
-            "example": "order-789"
-          },
-          "amount": {
-            "type": "number",
-            "format": "double",
-            "description": "Order amount",
-            "example": 150.50,
-            "minimum": 0
-          },
-          "clientId": {
-            "type": "string",
-            "description": "ID of the client who placed the order",
-            "example": "client-123"
-          },
-          "status": {
-            "$ref": "#/components/schemas/OrderStatus"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the order was created",
-            "example": "2026-01-29T10:30:00Z"
-          }
-        }
-      },
-      "OrderStatus": {
-        "type": "string",
-        "enum": ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"],
-        "description": "Status of the order",
-        "example": "PENDING"
-      },
-      "CreateOrderRequest": {
-        "type": "object",
-        "required": ["amount", "clientId"],
-        "properties": {
-          "amount": {
-            "type": "number",
-            "format": "double",
-            "description": "Order amount",
-            "example": 150.50,
-            "minimum": 0
-          },
-          "clientId": {
-            "type": "string",
-            "description": "ID of the client placing the order",
-            "example": "client-123"
-          }
-        }
-      },
-      "OrderApiError": {
-        "type": "object",
-        "required": ["message", "code"],
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "Error message describing what went wrong",
-            "example": "Client not found"
-          },
-          "code": {
-            "type": "string",
-            "description": "Error code for programmatic handling",
-            "example": "CLIENT_NOT_FOUND"
-          },
-          "details": {
-            "type": "object",
-            "description": "Additional details about the error",
-            "additionalProperties": true,
-            "example": {
-              "clientId": "client-999"
-            }
-          }
-        }
-      }
-    }
-  },
-  "tags": [
-    {
-      "name": "Clients",
-      "description": "Operations related to client management"
     },
-    {
-      "name": "Orders",
-      "description": "Operations related to order management"
+    "/orders/{id}/cancel": {
+      "post": {
+        "description": "Marks order as 'Canceled' (only from 'Created')",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "orders"
+        ],
+        "summary": "Cancel order",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Order ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/models.Order"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/http.apiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/http.apiError"
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}/pay": {
+      "post": {
+        "description": "Marks order as 'Paid' (only from 'Created')",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "orders"
+        ],
+        "summary": "Pay order",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Order ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/models.Order"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/http.apiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/http.apiError"
+            }
+          }
+        }
+      }
     }
-  ]
+  },
+  "definitions": {
+    "http.CreateOrderRequest": {
+      "type": "object",
+      "required": [
+        "amount",
+        "clientId"
+      ],
+      "properties": {
+        "amount": {
+          "type": "number"
+        },
+        "clientId": {
+          "type": "string"
+        }
+      }
+    },
+    "http.OrdersResponse-models_Order": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/models.Order"
+          }
+        },
+        "page": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "pages": {
+          "type": "integer"
+        },
+        "total": {
+          "type": "integer"
+        }
+      }
+    },
+    "http.apiError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "models.Client": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string"
+        },
+        "fullname": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/models.ClientStatus"
+        }
+      }
+    },
+    "models.ClientStatus": {
+      "type": "string",
+      "enum": [
+        "enabled",
+        "disabled"
+      ],
+      "x-enum-varnames": [
+        "ClientEnabled",
+        "ClientDisabled"
+      ]
+    },
+    "models.Order": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "dateCreated": {
+          "type": "string"
+        },
+        "dateUpdated": {
+          "type": "string"
+        },
+        "orderId": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/models.OrderStatus"
+        }
+      }
+    },
+    "models.OrderStatus": {
+      "type": "string",
+      "enum": [
+        "Created",
+        "Paid",
+        "Canceled"
+      ],
+      "x-enum-varnames": [
+        "OrderCreated",
+        "OrderPaid",
+        "OrderCanceled"
+      ]
+    }
+  }
 }
