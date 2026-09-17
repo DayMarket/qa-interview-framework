@@ -25,7 +25,7 @@ This project provides a framework for automated testing.
         - `OrdersApi.java` - order-related API methods (create, fetch orders).
     - `theCatApi` package
         - `BaseCatApi.java` - base client for TheCatApi.
-        - `CatApi.java` - endpoints for cat-breeds / related requests.
+        - `CatApi.java` - endpoints for cat-images / related requests; `getImages()` requests page `0` with a limit of `10`.
 
 - `classes/OrderApi`
     - Domain DTOs and error models: `Client.java`, `Order.java`, `OrderApiError.java`, `OrdersData.java`.
