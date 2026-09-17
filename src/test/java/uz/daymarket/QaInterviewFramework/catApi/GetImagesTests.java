@@ -7,12 +7,12 @@ import uz.daymarket.QaInterviewFramework.BaseTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class GetAllBreedsTests extends BaseTest {
+public class GetImagesTests extends BaseTest {
 
     @Test
-    public void getAllBreedsTest() {
+    public void getImagesTest() {
         CatApi api = new CatApi();
-        Response response = api.getAllBreeds();
+        Response response = api.getImages();
         assertThat(response.code())
                 .as("Check that status code is 200")
                 .isEqualTo(200);

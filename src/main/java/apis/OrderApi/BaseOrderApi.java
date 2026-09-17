@@ -17,7 +17,7 @@ import okhttp3.Request;
  */
 
 public class BaseOrderApi {
-    protected static final String BASE_URL = "https://qa-interview-service.dev.cluster.daymarket.uz";
+    protected static final String BASE_URL = "https://qa-interview-service.pl-dev.cluster.daymarket.uz";
 
     protected final OkHttpClient client;
 
