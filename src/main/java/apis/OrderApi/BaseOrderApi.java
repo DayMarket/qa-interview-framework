@@ -9,15 +9,15 @@ import okhttp3.Request;
  * Base class for Order API clients.
  * <p>
  * Service Swagger documentation:
- * <a href="https://qa-interview-service.pl-dev.cluster.daymarket.uz/swagger/index.html#">
- * https://qa-interview-service.pl-dev.cluster.daymarket.uz/swagger/index.html#
+ * <a href="https://qa-interview-service.tail60205e.ts.net/swagger/index.html">
+ * https://qa-interview-service.tail60205e.ts.net/swagger/index.html
  * </a>
  * <p>
  * OpenAPI 3.0 JSON spec: {@code resources/order-api-specification.json}
  */
 
 public class BaseOrderApi {
-    protected static final String BASE_URL = "https://qa-interview-service.pl-dev.cluster.daymarket.uz";
+    protected static final String BASE_URL = "https://qa-interview-service.tail60205e.ts.net";
 
     protected final OkHttpClient client;
 
